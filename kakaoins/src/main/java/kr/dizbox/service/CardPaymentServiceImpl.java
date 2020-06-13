@@ -145,6 +145,9 @@ public class CardPaymentServiceImpl implements CardPaymentService {
 			if(!cardPaymentVOOfPay.getJobCls().equals(JobCls.PAYMENT.getVal())){//--처리대상관리번호데이터가 결제내역이 아닌경우 예외처리
 				CardPaymentException.throwException(ResultCode.NO_DATA,String.format(ResultCode.NO_DATA.getMessage(), cardPaymentReqVO.getUid()));
 			}
+			if(!State.isComplate(cardPaymentVOOfPay.getState())) {
+				CardPaymentException.throwException(ResultCode.NO_DATA,String.format(ResultCode.NO_DATA.getMessage(), cardPaymentReqVO.getUid()));
+			}
 		}
 		
 		if(cardPaymentReqVO.getPayAmt().compareTo(cardPaymentVOOfPay.getPayAmt())>0) {//--취소금액이 결제금액초과하는지 체크

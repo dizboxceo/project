@@ -1,8 +1,8 @@
 1.개발프레임워크
 --개발언어 : 자바(jdk1.8)
---스프링
+--코어프레임워크 : 스프링
 --DB Embeded H2(파일)
---mybatis
+--DBIO : mybatis
 
 2.테이블설계
 -- 카드결제 메인테이블
@@ -50,13 +50,15 @@ create table if not exists card_pay_txt(
 		  "cvc":"929",                 //--CVC
 		  "instPlanNum":0,             //--할부개월수
 		  "inputVat":"",               //--부가세
+		  "testToken" : "",            //--테스트토큰(Y:세팅시 처리상태 9 진행중으로 데이터저장되고 이후 공백으로 재호출시 중복예외처리됨)
 		  "payAmt":100000              //--결제금액
 		}
     --카드결제취소 HTTP메소드 : PATCH
        {
 		  "uid":"2020061323531546d8e9", //--관리번호
 		  "inputVat":"",                //--부가세
-		  "payAmt":30000                //--취소금액 (취소금액이 결제금액보다 작은경우 부분취소됨)
+		  "payAmt":30000,               //--취소금액 (취소금액이 결제금액보다 작은경우 부분취소됨)
+		  "testToken" : ""              //--테스트토큰(Y:세팅시 처리상태 9 진행중으로 데이터저장되고 이후 공백으로 재호출시 중복예외처리됨)
 		}	
     --데이터조회 HTTP메소드 : GET
        http://localhost:8080/controller/cardpay/{uid}
