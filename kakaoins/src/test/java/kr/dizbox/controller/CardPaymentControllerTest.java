@@ -1,13 +1,14 @@
 package kr.dizbox.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +32,8 @@ import kr.dizbox.domain.CardPaymentReqVO;
 @SuppressWarnings("deprecation")
 public class CardPaymentControllerTest {
 
+	private Logger log = Logger.getLogger(CardPaymentControllerTest.class);
+	
 	@Autowired
 	private WebApplicationContext ctx;
 	
@@ -59,10 +62,12 @@ public class CardPaymentControllerTest {
 				.payAmt(BigDecimal.valueOf(100000))
 				.inputVat("0")
 				;
+		String jsonStr = gson.toJson(cardPaymentReqVO);
+		log.info(jsonStr);
 		
 		mockMvc.perform(post("/cardpay")
 		       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-               .content(gson.toJson(cardPaymentReqVO)))
+               .content(jsonStr))
 		       .andDo(print())
 		       .andExpect(status().is(200));
 		
@@ -81,17 +86,21 @@ public class CardPaymentControllerTest {
 				.payAmt(BigDecimal.valueOf(100000))
 				.inputVat("0")
 				;
+		
+		String jsonStr = gson.toJson(cardPaymentReqVO);
+		log.info(jsonStr);
+		
 		cardPaymentReqVO.setTestToken("Y");
 		mockMvc.perform(post("/cardpay")
 		       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-               .content(gson.toJson(cardPaymentReqVO)))
+               .content(jsonStr))
 		       .andDo(print())
 		       .andExpect(status().is(200));
 		
 		cardPaymentReqVO.setTestToken("");
 		mockMvc.perform(post("/cardpay")
 			       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-	               .content(gson.toJson(cardPaymentReqVO)))
+	               .content(jsonStr))
 			       .andDo(print())
 			       .andExpect(status().is(200));
 		
@@ -104,14 +113,17 @@ public class CardPaymentControllerTest {
 	@Test
 	public void testCancel() throws Exception {
 		CardPaymentReqVO cardPaymentReqVO = CardPaymentReqVO.builder()
-				.uid("2020061321482757f29e")
+				.uid("20200613231724656dfa")
 				.payAmt(BigDecimal.valueOf(30000))
 				.inputVat("0")
 				;
 		
-		mockMvc.perform(delete("/cardpay")
+		String jsonStr = gson.toJson(cardPaymentReqVO);
+		log.info(jsonStr);
+		
+		mockMvc.perform(patch("/cardpay")
 		       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-		       .content(gson.toJson(cardPaymentReqVO)))
+		       .content(jsonStr))
 			   .andDo(print())
 		       .andExpect(status().is(200));
 		
@@ -128,17 +140,21 @@ public class CardPaymentControllerTest {
 				.payAmt(BigDecimal.valueOf(100000))
 				.inputVat("0")
 				;
+		
+		String jsonStr = gson.toJson(cardPaymentReqVO);
+		log.info(jsonStr);
+		
 		cardPaymentReqVO.setTestToken("Y");
-		mockMvc.perform(delete("/cardpay")
+		mockMvc.perform(patch("/cardpay")
 		       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-		       .content(gson.toJson(cardPaymentReqVO)))
+		       .content(jsonStr))
 			   .andDo(print())
 		       .andExpect(status().is(200));
 		
 		cardPaymentReqVO.setTestToken("");
-		mockMvc.perform(delete("/cardpay")
+		mockMvc.perform(patch("/cardpay")
 			       .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-			       .content(gson.toJson(cardPaymentReqVO)))
+			       .content(jsonStr))
 				   .andDo(print())
 			       .andExpect(status().is(200));
 		

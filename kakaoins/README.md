@@ -1,5 +1,7 @@
 1.개발프레임워크
+--개발언어 : 자바(jdk1.8)
 --스프링
+--DB Embeded H2(파일)
 --mybatis
 
 2.테이블설계
@@ -34,10 +36,12 @@ create table if not exists card_pay_txt(
   --카드사 전송요청 실패시 예외처리
 
 4.빌드 및 실행방법
---메이븐 업데이트 수행
+--프로젝트 메이븐 업데이트 수행
+--DB 테이블은 프로그램수행시 자동생성됨
 --단위테스트 를 통한 테스트 수행
+  --MockMvc 를 통한 서블릿환경의 rest 서비스 단위테스트
   --kr.dizbox.controller.CardPaymentControllerTest 의 테스트 메소드를 수행하여 콘솔로그로 결과확인
-  --시나리오
+  --테스트케이스 메소드
     testPay 메소드 수행 (input 변경후 수행가능)
        -- 수행결과 콘솔로그 확인
     testPayDupCheck 메소드 수행 (input 변경후 수행가능)
@@ -51,4 +55,5 @@ create table if not exists card_pay_txt(
           두번째 호출시 중복처리 예외처리됨을 확인
        --수행결과 콘솔로그 확인   
     testFind 메소드 수행(*위의 testPay의 콘솔로그수행결과의 관리번호를 input에 기재하여 수행 )
-       --수행결과 콘솔로그 확인      
+       --수행결과 콘솔로그 확인
+--이클립스내 톰캣서버 세팅후 브라우저에서 테스트             

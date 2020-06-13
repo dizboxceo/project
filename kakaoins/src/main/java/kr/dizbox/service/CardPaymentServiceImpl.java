@@ -27,6 +27,9 @@ public class CardPaymentServiceImpl implements CardPaymentService {
 	@Autowired
 	private CardPaymentMapper mapper;
 
+	/**
+	 * 카드결제를 수행한다.
+	 */
 	@Override
 	@Transactional
 	public CardPaymentResVO pay(CardPaymentReqVO cardPaymentReqVO) {
@@ -105,6 +108,12 @@ public class CardPaymentServiceImpl implements CardPaymentService {
 				.resultMsg(cardPaymentVO.getComment());
 	}
 	
+	/**
+	 * 카드사 전송서비스를 수행한다.
+	 * @param cardPaymentReqVO 요청VO
+	 * @param cardPaymentVO 처리정보VO
+	 * @return 처리결과 VO
+	 */
 	@Transactional
 	private CardPayTxtVO callPay(CardPaymentReqVO cardPaymentReqVO,CardPaymentVO cardPaymentVO) {
 		CardPayTxtVO cardPayTxtVO = CardPayTxtVO.builder().payTxt(PayUtil.genPayTxt(cardPaymentReqVO, cardPaymentVO));
@@ -113,6 +122,9 @@ public class CardPaymentServiceImpl implements CardPaymentService {
 		return cardPayTxtVO;
 	}
 
+	/**
+	 * 결제 취소를 수행한다.
+	 */
 	@Override
 	public CardPaymentResVO cancel(CardPaymentReqVO cardPaymentReqVO) {
 		log.info("cancel...."+cardPaymentReqVO);
@@ -127,8 +139,12 @@ public class CardPaymentServiceImpl implements CardPaymentService {
 		
 		CardPaymentVO cardPaymentVOOfPay = mapper.readCardPayment(cardPaymentReqVO.getUid());
 		
-		if(cardPaymentVOOfPay==null) {//--결제내역체크
+		if(cardPaymentVOOfPay==null) {//--결제내역이 없는경우 예외처리
 			CardPaymentException.throwException(ResultCode.NO_DATA,String.format(ResultCode.NO_DATA.getMessage(), cardPaymentReqVO.getUid()));
+		}else {
+			if(!cardPaymentVOOfPay.getJobCls().equals(JobCls.PAYMENT.getVal())){//--처리대상관리번호데이터가 결제내역이 아닌경우 예외처리
+				CardPaymentException.throwException(ResultCode.NO_DATA,String.format(ResultCode.NO_DATA.getMessage(), cardPaymentReqVO.getUid()));
+			}
 		}
 		
 		if(cardPaymentReqVO.getPayAmt().compareTo(cardPaymentVOOfPay.getPayAmt())>0) {//--취소금액이 결제금액초과하는지 체크
@@ -198,6 +214,11 @@ public class CardPaymentServiceImpl implements CardPaymentService {
 						,String.format(ResultCode.INVALID_PARTIAL_CANCEL_AMT.getMessage(), PayUtil.comma(cardPaymentReqVO.getPayAmt())));
 			}
 			
+			if(isVatCalculated && cardPaymentReqVO.getVat().compareTo(remainVat)>0) {//--계산된 부가가치세가 잔여 부가가치세보다 큰경우 잔여부가가치세로 세팅
+				cardPaymentReqVO.setVat(remainVat);
+			}
+			
+			
 			if(cardPaymentReqVO.getVat().compareTo(remainVat)>0) {
 				CardPaymentException.throwException(ResultCode.INVALID_PARTIAL_CANCEL_VAT
 						,String.format(ResultCode.INVALID_PARTIAL_CANCEL_VAT.getMessage()
@@ -205,9 +226,6 @@ public class CardPaymentServiceImpl implements CardPaymentService {
 								, PayUtil.comma(cardPaymentReqVO.getVat())));
 			}
 			
-			if(cardPaymentReqVO.getPayAmt().compareTo(remainPayAmt)==0) {//--취소금액이 잔여결제금액과 동일한경우 자동계산된 취소부가가치세는 잔여부가가치세로 세팅
-				cardPaymentReqVO.setVat(remainVat);
-			}
 			
 		}
 		

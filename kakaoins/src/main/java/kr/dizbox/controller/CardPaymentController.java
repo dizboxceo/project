@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,7 +41,7 @@ public class CardPaymentController {
 		return new ResponseEntity<CardPaymentResVO>(cardPaymentResVO,HttpStatus.OK);
 	}
 	
-	@DeleteMapping(consumes = "application/json", produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
+	@PatchMapping(consumes = "application/json", produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
 	public ResponseEntity<CardPaymentResVO> cancel(@RequestBody CardPaymentReqVO cardPaymentReqVO){
 		log.info("CardPaymentReqVO:"+cardPaymentReqVO);
 		CardPaymentResVO cardPaymentResVO = null;
