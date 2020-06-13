@@ -38,6 +38,30 @@ create table if not exists card_pay_txt(
 4.빌드 및 실행방법
 --프로젝트 메이븐 업데이트 수행
 --DB 테이블은 프로그램수행시 자동생성됨
+
+--이클립스내 톰캣서버 세팅 및 수행후 Json 테스트 도구를 이용하여 테스트
+  --크롬내 확장도구 Rest client 등           
+  --json 레이아웃
+    --URL : http://localhost:8080/controller/cardpay/
+    --카드결제 HTTP메소드 : POST
+       {
+		  "cardNo":"9445111122223333", //--카드번호
+		  "validDt":"0525",            //--유효기간
+		  "cvc":"929",                 //--CVC
+		  "instPlanNum":0,             //--할부개월수
+		  "inputVat":"",               //--부가세
+		  "payAmt":100000              //--결제금액
+		}
+    --카드결제취소 HTTP메소드 : PATCH
+       {
+		  "uid":"2020061323531546d8e9", //--관리번호
+		  "inputVat":"",                //--부가세
+		  "payAmt":30000                //--취소금액 (취소금액이 결제금액보다 작은경우 부분취소됨)
+		}	
+    --데이터조회 HTTP메소드 : GET
+       http://localhost:8080/controller/cardpay/{uid}
+         --예)http://localhost:8080/controller/cardpay/2020061323531546d8e9	
+         
 --단위테스트 를 통한 테스트 수행
   --MockMvc 를 통한 서블릿환경의 rest 서비스 단위테스트
   --kr.dizbox.controller.CardPaymentControllerTest 의 테스트 메소드를 수행하여 콘솔로그로 결과확인
@@ -56,4 +80,5 @@ create table if not exists card_pay_txt(
        --수행결과 콘솔로그 확인   
     testFind 메소드 수행(*위의 testPay의 콘솔로그수행결과의 관리번호를 input에 기재하여 수행 )
        --수행결과 콘솔로그 확인
---이클립스내 톰캣서버 세팅후 브라우저에서 테스트             
+		
+      
