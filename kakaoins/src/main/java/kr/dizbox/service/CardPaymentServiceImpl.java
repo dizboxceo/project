@@ -94,7 +94,7 @@ public class CardPaymentServiceImpl implements CardPaymentService {
 		 */
 		if("Y".equals(cardPaymentReqVO.getTestToken())){
 			cardPaymentVO.setState(State.ONGOING.getVal());
-			cardPaymentVO.setComment("");
+			cardPaymentVO.setComment("카드결제가 진행중입니다.");
 		}
 		
 		mapper.updateCardPayment(cardPaymentVO);
@@ -257,7 +257,7 @@ public class CardPaymentServiceImpl implements CardPaymentService {
 		 */
 		if("Y".equals(cardPaymentReqVO.getTestToken())){
 			cardPaymentVO.setState(State.ONGOING.getVal());
-			cardPaymentVO.setComment("");
+			cardPaymentVO.setComment("카드결제 취소가 진행중입니다.");
 		}
 		
 		mapper.updateCardPayment(cardPaymentVO);
