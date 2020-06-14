@@ -42,7 +42,8 @@ create table if not exists card_pay_txt(
 --이클립스내 톰캣서버 세팅 및 수행후 Json 테스트 도구를 이용하여 테스트
   --크롬내 확장도구 Rest client 등           
   --json 레이아웃
-    --URL : http://localhost:8080/controller/cardpay/
+    --URL : http://localhost:8080/{path}/cardpay/
+      예)http://localhost:8080/controller/cardpay
     --카드결제 HTTP메소드 : POST
        {
 		  "cardNo":"9445111122223333", //--카드번호

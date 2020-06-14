@@ -22,6 +22,7 @@ public enum ResultCode {
 	,INVALID_PAY_TXT("17","전문레이아웃이 유효하지 않습니다.")
 	,FAIL_ENCRYPT("18","카드정보 암호화수행중 시스템 오류가 발생했습니다.")
 	,FAIL_DECRYPT("19","카드정보 복호화수행중 시스템 오류가 발생했습니다.")
+	,TX_FAIL("20","카드사 통신중 오류가 발생하였습니다.")
 	;
 	
 	private String code;

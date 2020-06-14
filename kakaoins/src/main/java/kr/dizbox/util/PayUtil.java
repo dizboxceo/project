@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import kr.dizbox.domain.CardPayTxtVO;
 import kr.dizbox.domain.CardPaymentReqVO;
 import kr.dizbox.domain.CardPaymentVO;
+import kr.dizbox.domain.CardTxResult;
 import kr.dizbox.domain.DataCls;
 import kr.dizbox.domain.ResultCode;
 import kr.dizbox.domain.State;
@@ -79,6 +80,11 @@ public class PayUtil {
 	}
 	
 	public static void setResult(CardPaymentVO cardPaymentVO,CardPayTxtVO cardPayTxtVO,boolean isVatCalculated) {
+		if(CardTxResult.isFail(cardPayTxtVO.getTxResultCd())){
+			cardPaymentVO.setState(State.TX_FAIL.getVal());
+			cardPaymentVO.setComment(ResultCode.TX_FAIL.getMessage());
+			return;
+		}
 		if(DataCls.isPayment(cardPaymentVO.getDataCls())) {
 			cardPaymentVO.setState(State.COMPLATE.getVal());
 			if(isVatCalculated) {

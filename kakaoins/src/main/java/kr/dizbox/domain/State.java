@@ -1,7 +1,7 @@
 package kr.dizbox.domain;
 
 public enum State {
-	COMPLATE("0"),ONGOING("9");
+	COMPLATE("0"),ONGOING("9"),TX_FAIL("F");
 	private String val;
 	private State(String val) {
 		this.val = val;
@@ -17,6 +17,10 @@ public enum State {
 	
 	public static boolean isOngoing(String val) {
 		return ONGOING.val.equals(val);
+	}
+	
+	public static boolean isTxFail(String val) {
+		return TX_FAIL.val.equals(val);
 	}
 	
 }
